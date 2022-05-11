@@ -2,9 +2,9 @@
 /******/ 	"use strict";
 /******/ 	var __webpack_modules__ = ({
 
-/***/ "./src/components/key.js":
+/***/ "./src/components/Key.js":
 /*!*******************************!*\
-  !*** ./src/components/key.js ***!
+  !*** ./src/components/Key.js ***!
   \*******************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
@@ -51,28 +51,73 @@ var Key = /*#__PURE__*/function () {
         register = 'shihtCaps';
       }
 
-      this.key = document.createElement('div'); // Проверяем значение и задаем параметры исходя из условий
+      var arrKeys = document.querySelectorAll('.key');
+      var objKeys = {};
+      arrKeys.forEach(function (el) {
+        objKeys[el.dataset.key] = el;
+      }); // Содержание кнопки
+
+      var value = _keys__WEBPACK_IMPORTED_MODULE_0__["default"][val][lang][register];
+      this.key = document.createElement('div'); // Обрабатываем события клавиатуры
+
+      document.addEventListener('keydown', function (event) {
+        // Убираем стандартное действие на нажатие кнопки
+        if (event.code === 'AltLeft' || event.code === 'AltRight' || event.code === 'Tab') {
+          event.preventDefault();
+        } // Добавляем активность всем клавишам
+
+
+        if (event.code === val) {
+          _this.key.classList.add('key--active');
+        } // Активируем/деактивируем CapsLock
+
+
+        if (event.code === 'CapsLock') {
+          _this.key.classList.toggle('capslock--active');
+        }
+      });
+      document.addEventListener('keyup', function (event) {
+        if (event.code === val) {
+          _this.key.classList.remove('key--active');
+        }
+      });
+      ['mousedown', 'mouseup', 'mouseleave'].forEach(function (el) {
+        _this.key.addEventListener(el, function (event) {
+          _this.keyMoveAction(event.type);
+        });
+      }); // Проверяем значение и задаем параметры исходя из условий
 
       switch (val) {
         case 'Backspace':
           this.key.className = 'key key--big';
-          this.key.textContent = _keys__WEBPACK_IMPORTED_MODULE_0__["default"][val][lang][register];
-          this.key.setAttribute('data-key', val);
+          this.key.textContent = value;
+          this.key.setAttribute('data-key', val); // Создаем обработчик на события мыши
+
+          this.key.addEventListener('click', function () {
+            var input = document.querySelector('.textarea');
+            input.value = input.value.split('').splice(0, input.value.length - 1).join('');
+          });
           break;
 
         case 'Tab':
           this.key.className = 'key key--big';
           this.key.textContent = val;
           this.key.setAttribute('data-key', val);
+          this.key.addEventListener('click', function () {
+            var input = document.querySelector('.textarea');
+            input.value += value;
+          });
           break;
 
         case 'CapsLock':
-          this.key.className = 'key key--big capslock';
+          if (caps) {
+            this.key.className = 'key key--big key--active capslock capslock--active';
+          } else {
+            this.key.className = 'key key--big capslock';
+          }
+
           this.key.textContent = val;
           this.key.setAttribute('data-key', val);
-          this.key.addEventListener('keydown', function () {
-            _this.key.classList.toggle('capslock--active');
-          });
           this.key.addEventListener('click', function () {
             _this.key.classList.toggle('capslock--active');
           });
@@ -82,64 +127,97 @@ var Key = /*#__PURE__*/function () {
           this.key.className = 'key key--big';
           this.key.textContent = val;
           this.key.setAttribute('data-key', val);
+          this.key.addEventListener('click', function () {
+            var input = document.querySelector('.textarea');
+            input.value += value;
+          });
           break;
 
         case 'ShiftRight':
-          this.key.className = 'key key--big';
-          this.key.textContent = _keys__WEBPACK_IMPORTED_MODULE_0__["default"][val][lang][register];
+          if (shift) {
+            this.key.className = 'key key--big key--active';
+          } else {
+            this.key.className = 'key key--big';
+          }
+
+          this.key.textContent = value;
           this.key.setAttribute('data-key', val);
           break;
 
         case 'ShiftLeft':
-          this.key.className = 'key key--big';
-          this.key.textContent = _keys__WEBPACK_IMPORTED_MODULE_0__["default"][val][lang][register];
+          if (shift) {
+            this.key.className = 'key key--big key--active';
+          } else {
+            this.key.className = 'key key--big';
+          }
+
+          this.key.textContent = value;
           this.key.setAttribute('data-key', val);
           break;
 
         case 'ControlLeft':
           this.key.className = 'key';
-          this.key.textContent = _keys__WEBPACK_IMPORTED_MODULE_0__["default"][val][lang][register];
+          this.key.textContent = value;
           this.key.setAttribute('data-key', val);
           break;
 
         case 'Space':
           this.key.className = 'key key--extra-big';
-          this.key.textContent = _keys__WEBPACK_IMPORTED_MODULE_0__["default"][val][lang][register];
+          this.key.textContent = value;
           this.key.setAttribute('data-key', val);
+          this.key.addEventListener('click', function () {
+            var input = document.querySelector('.textarea');
+            input.value += value;
+          });
           break;
 
         case 'MetaLeft':
           this.key.className = 'key';
-          this.key.textContent = _keys__WEBPACK_IMPORTED_MODULE_0__["default"][val][lang][register];
+          this.key.textContent = value;
           this.key.setAttribute('data-key', val);
           break;
 
         case 'AltLeft':
           this.key.className = 'key ';
-          this.key.textContent = _keys__WEBPACK_IMPORTED_MODULE_0__["default"][val][lang][register];
+          this.key.textContent = value;
           this.key.setAttribute('data-key', val);
           break;
 
         case 'AltRight':
           this.key.className = 'key ';
-          this.key.textContent = _keys__WEBPACK_IMPORTED_MODULE_0__["default"][val][lang][register];
+          this.key.textContent = value;
           this.key.setAttribute('data-key', val);
           break;
 
         case 'ControlRight':
           this.key.className = 'key';
-          this.key.textContent = _keys__WEBPACK_IMPORTED_MODULE_0__["default"][val][lang][register];
+          this.key.textContent = value;
           this.key.setAttribute('data-key', val);
           break;
 
         default:
           this.key.className = 'key';
-          this.key.textContent = _keys__WEBPACK_IMPORTED_MODULE_0__["default"][val][lang][register];
+          this.key.textContent = value;
           this.key.setAttribute('data-key', val);
+          this.key.addEventListener('click', function () {
+            var input = document.querySelector('.textarea');
+            input.value += value;
+          });
           break;
       }
 
       return this.key;
+    }
+  }, {
+    key: "keyMoveAction",
+    value: function keyMoveAction(event) {
+      if (event === 'mousedown') {
+        this.key.classList.add('key--active');
+      } else if (event === 'mouseup') {
+        this.key.classList.remove('key--active');
+      } else if (event === 'mouseleave') {
+        this.key.classList.remove('key--active');
+      }
     }
   }]);
 
@@ -150,9 +228,9 @@ var Key = /*#__PURE__*/function () {
 
 /***/ }),
 
-/***/ "./src/components/keyboard.js":
+/***/ "./src/components/Keyboard.js":
 /*!************************************!*\
-  !*** ./src/components/keyboard.js ***!
+  !*** ./src/components/Keyboard.js ***!
   \************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
@@ -160,7 +238,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (/* binding */ Keyboard)
 /* harmony export */ });
-/* harmony import */ var _key__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./key */ "./src/components/key.js");
+/* harmony import */ var _Key__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Key */ "./src/components/Key.js");
 /* harmony import */ var _keys__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./keys */ "./src/components/keys.js");
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -178,19 +256,21 @@ var Keyboard = /*#__PURE__*/function () {
     // Основа для размещения кнопок, изначально пустая
     this.main = null; // Порядок добавления элементов на виртуальную клавиатуру
 
-    this.keysOrders = ['Backquote', 'Digit1', 'Digit2', 'Digit3', 'Digit4', 'Digit5', 'Digit6', 'Digit7', 'Digit8', 'Digit9', 'Digit0', 'Minus', 'Equal', 'Backspace', 'Tab', 'KeyQ', 'KeyW', 'KeyE', 'KeyR', 'KeyT', 'KeyY', 'KeyU', 'KeyI', 'KeyO', 'KeyP', 'BracketLeft', 'BracketRight', 'Backslash', 'CapsLock', 'KeyA', 'KeyS', 'KeyD', 'KeyF', 'KeyG', 'KeyH', 'KeyJ', 'KeyK', 'KeyL', 'Semicolon', 'Quote', 'Enter', 'ShiftLeft', 'KeyZ', 'KeyX', 'KeyC', 'KeyV', 'KeyB', 'KeyN', 'KeyM', 'Comma', 'Period', 'Slash', 'ArrowUp', 'ShiftRight', 'ControlLeft', 'MetaLeft', 'AltLeft', 'Space', 'AltRight', 'ControlRight', 'ArrowLeft', 'ArrowDown', 'ArrowRight']; // Keys содержит объект с кнопками, которые имеют разное содержание,
+    this.keysOrders = ['Backquote', 'Digit1', 'Digit2', 'Digit3', 'Digit4', 'Digit5', 'Digit6', 'Digit7', 'Digit8', 'Digit9', 'Digit0', 'Minus', 'Equal', 'Backspace', 'Tab', 'KeyQ', 'KeyW', 'KeyE', 'KeyR', 'KeyT', 'KeyY', 'KeyU', 'KeyI', 'KeyO', 'KeyP', 'BracketLeft', 'BracketRight', 'Backslash', 'CapsLock', 'KeyA', 'KeyS', 'KeyD', 'KeyF', 'KeyG', 'KeyH', 'KeyJ', 'KeyK', 'KeyL', 'Semicolon', 'Quote', 'Enter', 'ShiftLeft', 'KeyZ', 'KeyX', 'KeyC', 'KeyV', 'KeyB', 'KeyN', 'KeyM', 'Comma', 'Period', 'Slash', 'ArrowUp', 'ShiftRight', 'ControlLeft', 'MetaLeft', 'AltLeft', 'Space', 'AltRight', 'ControlRight', 'ArrowLeft', 'ArrowDown', 'ArrowRight', 'LANG']; // Keys содержит объект с кнопками, которые имеют разное содержание,
     // в зависимости от условий(язык, нажат ли шифт или капслок)
 
     this.keys = _keys__WEBPACK_IMPORTED_MODULE_1__["default"]; // Свойство указыващее на то нажат ли shift в настоящий момент
 
     this.shiftOn = false; // Свойство указыващее на то активирован ли capslock в настоящий момент
 
-    this.capsLock = false;
+    this.capsLock = false; // Язык в настоящий момент
+
+    this.language = 'en';
   }
 
   _createClass(Keyboard, [{
     key: "keyboardOn",
-    value: function keyboardOn(lang) {
+    value: function keyboardOn() {
       var _this = this;
 
       // Создал обертку для клавиатуры
@@ -200,9 +280,10 @@ var Keyboard = /*#__PURE__*/function () {
 
       this.keysOrders.forEach(function (el) {
         // На каждой итерации создается новая кнопка
-        var newKey = new _key__WEBPACK_IMPORTED_MODULE_0__["default"](); // И далее созданная кнопка подключается к основе содержащей все кнопки
+        var newKey = new _Key__WEBPACK_IMPORTED_MODULE_0__["default"]();
+        newKey = newKey.createKey(el, _this.language, _this.shiftOn, _this.capsLock); // И далее созданная кнопка подключается к основе содержащей все кнопки
 
-        _this.main.append(newKey.createKey(el, lang, _this.shiftOn, _this.capsLock));
+        _this.main.append(newKey);
       }); // main подключается к странице
 
       document.querySelector('.wrapper').append(this.main);
@@ -210,6 +291,62 @@ var Keyboard = /*#__PURE__*/function () {
   }]);
 
   return Keyboard;
+}();
+
+
+
+/***/ }),
+
+/***/ "./src/components/Page.js":
+/*!********************************!*\
+  !*** ./src/components/Page.js ***!
+  \********************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ Page)
+/* harmony export */ });
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); Object.defineProperty(Constructor, "prototype", { writable: false }); return Constructor; }
+
+var Page = /*#__PURE__*/function () {
+  function Page() {
+    _classCallCheck(this, Page);
+
+    this.wrapper = document.createElement('div');
+    this.title = document.createElement('h1');
+    this.description = document.createElement('ul');
+    this.item1 = document.createElement('li');
+    this.item2 = document.createElement('li');
+    this.textArea = document.createElement('textarea');
+  }
+
+  _createClass(Page, [{
+    key: "createPage",
+    value: function createPage() {
+      // Задаем классы элементам
+      this.wrapper.className = 'wrapper';
+      this.title.className = 'title';
+      this.description.className = 'description';
+      this.item1.className = 'description__item';
+      this.item2.className = 'description__item';
+      this.textArea.className = 'textarea'; // Задаем контентную часть
+
+      this.title.textContent = 'Virtual Keyboard';
+      this.item1.textContent = 'Для смены языка нажмите на клавиатуре компьютера CTRL + ALT / нажмите на кнопку смены языка в нижнем правом углу';
+      this.item2.textContent = 'Клавиатура создана в операционной системе Windows'; // Добавляем на страницу готовые элементы
+
+      this.description.append(this.item1, this.item2);
+      this.wrapper.append(this.title, this.description, this.textArea);
+      return this.wrapper;
+    }
+  }]);
+
+  return Page;
 }();
 
 
@@ -601,8 +738,8 @@ var keys = {
     en: {
       capsOn: ']',
       capsOff: ']',
-      shiftOn: '{',
-      shihtCaps: '{'
+      shiftOn: '}',
+      shihtCaps: '}'
     }
   },
   Backslash: {
@@ -1108,6 +1245,20 @@ var keys = {
       shiftOn: 'ᐳ',
       shihtCaps: 'ᐳ'
     }
+  },
+  LANG: {
+    ru: {
+      capsOn: 'RU',
+      capsOff: 'RU',
+      shiftOn: 'RU',
+      shihtCaps: 'RU'
+    },
+    en: {
+      capsOn: 'EN',
+      capsOff: 'EN',
+      shiftOn: 'EN',
+      shihtCaps: 'EN'
+    }
   }
 };
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (keys);
@@ -1189,62 +1340,123 @@ var __webpack_exports__ = {};
   !*** ./src/js/index.js ***!
   \*************************/
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _components_keyboard__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../components/keyboard */ "./src/components/keyboard.js");
-/* harmony import */ var _scss_style_scss__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../scss/style.scss */ "./src/scss/style.scss");
+/* harmony import */ var _components_Keyboard__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../components/Keyboard */ "./src/components/Keyboard.js");
+/* harmony import */ var _components_Page__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../components/Page */ "./src/components/Page.js");
+/* harmony import */ var _scss_style_scss__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../scss/style.scss */ "./src/scss/style.scss");
 
- // Генерируем элементы для страницы
 
-var wrapper = document.createElement('div');
-var title = document.createElement('h1');
-var description = document.createElement('ul');
-var item1 = document.createElement('li');
-var item2 = document.createElement('li');
-var textArea = document.createElement('textarea'); // Задаем классы элементам
 
-wrapper.className = 'wrapper';
-title.className = 'title';
-description.className = 'description';
-item1.className = 'description__item';
-item2.className = 'description__item';
-textArea.className = 'textarea'; // Задаем контентную часть
+var page = new _components_Page__WEBPACK_IMPORTED_MODULE_1__["default"]();
+document.body.append(page.createPage()); // Создаем стартовый экземпляр клавиатуры
 
-title.textContent = 'Virtual Keyboard';
-item1.textContent = 'Для смены языка нажмите SHIFT + ALT';
-item2.textContent = 'Клавиатура создана в операционной системе Windows'; // Добавляем на страницу готовые элементы
-
-description.append(item1, item2);
-wrapper.append(title, description, textArea);
-document.body.append(wrapper); // Создаем стартовый экземпляр клавиатуры
-
-var keyboard = new _components_keyboard__WEBPACK_IMPORTED_MODULE_0__["default"]();
-keyboard.keyboardOn('en'); // Слушаем события нажатия клавиш на виртуальной клавиатуре мышкой
-
+var keyboard = new _components_Keyboard__WEBPACK_IMPORTED_MODULE_0__["default"]();
+keyboard.keyboardOn();
 document.addEventListener('mousedown', function (event) {
-  var target = event.target;
-
-  if (target.className.includes('key') && !target.className.includes('keyboard')) {
-    target.classList.add('key--active');
-    document.addEventListener('mouseup', function () {
-      target.classList.remove('key--active');
-    });
-  }
-}); // Слушаем события нажатия клавиш на реальной клавиатуре
-
-document.addEventListener('keydown', function (event) {
   var arrKeys = document.querySelectorAll('.key');
+  var objKeys = {};
   arrKeys.forEach(function (el) {
-    if (event.code === el.dataset.key) {
-      el.classList.add('key--active');
+    objKeys[el.dataset.key] = el;
+  });
 
-      if (event.code === 'AltLeft' || event.code === 'AltRight' || event.code === 'Tab') {
-        event.preventDefault();
-      }
+  if (event.target.dataset.key === 'CapsLock') {
+    document.querySelector('.keyboard').remove();
+    keyboard.capsLock = !keyboard.capsLock;
+    keyboard.keyboardOn();
+  }
+
+  if (event.target.dataset.key === 'ShiftRight' || event.target.dataset.key === 'ShiftLeft') {
+    document.querySelector('.keyboard').remove();
+    keyboard.shiftOn = !keyboard.shiftOn;
+    keyboard.keyboardOn();
+  }
+
+  if (event.target.dataset.key === 'LANG') {
+    document.querySelector('.keyboard').remove();
+
+    if (keyboard.language === 'en') {
+      keyboard.language = 'ru';
+    } else {
+      keyboard.language = 'en';
     }
 
-    window.addEventListener('keyup', function () {
-      el.classList.remove('key--active');
-    });
+    keyboard.keyboardOn();
+  }
+});
+document.addEventListener('mouseup', function (event) {
+  var arrKeys = document.querySelectorAll('.key');
+  var objKeys = {};
+  arrKeys.forEach(function (el) {
+    objKeys[el.dataset.key] = el;
   });
+
+  if (event.target.dataset.key === 'CapsLock') {
+    objKeys.CapsLock.classList.remove('key--active');
+  }
+
+  if (event.target.dataset.key === 'ShiftRight' || event.target.dataset.key === 'ShiftLeft') {
+    document.querySelector('.keyboard').remove();
+    keyboard.shiftOn = !keyboard.shiftOn;
+    keyboard.keyboardOn();
+    objKeys.ShiftRight.classList.remove('key--active');
+    objKeys.ShiftLeft.classList.remove('key--active');
+  }
+});
+document.addEventListener('keydown', function (event) {
+  event.preventDefault();
+  var arrKeys = document.querySelectorAll('.key');
+  var objKeys = {};
+  arrKeys.forEach(function (el) {
+    objKeys[el.dataset.key] = el;
+  });
+
+  if (event.key !== 'Shift' && event.key !== 'Alt' && event.key !== 'Control' && event.key !== 'CapsLock') {
+    var input = document.querySelector('.textarea');
+
+    if (event.key === 'Tab') {
+      input.value += '\t';
+    } else if (event.key === 'Enter') {
+      input.value += '\n';
+    } else if (event.key === 'Backspace') {
+      input.value = input.value.split('').splice(0, input.value.length - 1).join('');
+    } else {
+      input.value += objKeys[event.code].textContent;
+    }
+  }
+
+  if (event.repeat) {
+    return;
+  }
+
+  if (event.code === 'CapsLock') {
+    document.querySelector('.keyboard').remove();
+    keyboard.capsLock = !keyboard.capsLock;
+    keyboard.keyboardOn();
+  }
+
+  if (event.code === 'ShiftRight' || event.code === 'ShiftLeft') {
+    document.querySelector('.keyboard').remove();
+    keyboard.shiftOn = !keyboard.shiftOn;
+    keyboard.keyboardOn();
+  }
+
+  if (event.code === 'AltLeft' && event.ctrlKey || event.code === 'AltRight' && event.ctrlKey) {
+    document.querySelector('.keyboard').remove();
+
+    if (keyboard.language === 'en') {
+      keyboard.language = 'ru';
+    } else {
+      keyboard.language = 'en';
+    }
+
+    keyboard.keyboardOn();
+  }
+});
+document.addEventListener('keyup', function (event) {
+  if (event.code === 'ShiftRight' || event.code === 'ShiftLeft') {
+    document.querySelector('.keyboard').remove();
+    keyboard.shiftOn = !keyboard.shiftOn;
+    keyboard.keyboardOn();
+  }
 });
 })();
 

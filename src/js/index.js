@@ -1,55 +1,108 @@
-import Keyboard from '../components/keyboard';
+import Keyboard from '../components/Keyboard';
+import Page from '../components/Page';
 import '../scss/style.scss';
-// Генерируем элементы для страницы
-const wrapper = document.createElement('div');
-const title = document.createElement('h1');
-const description = document.createElement('ul');
-const item1 = document.createElement('li');
-const item2 = document.createElement('li');
-const textArea = document.createElement('textarea');
-// Задаем классы элементам
-wrapper.className = 'wrapper';
-title.className = 'title';
-description.className = 'description';
-item1.className = 'description__item';
-item2.className = 'description__item';
-textArea.className = 'textarea';
 
-// Задаем контентную часть
-title.textContent = 'Virtual Keyboard';
-item1.textContent = 'Для смены языка нажмите SHIFT + ALT';
-item2.textContent = 'Клавиатура создана в операционной системе Windows';
-// Добавляем на страницу готовые элементы
-description.append(item1, item2);
-wrapper.append(title, description, textArea);
-document.body.append(wrapper);
+const page = new Page();
+document.body.append(page.createPage());
 // Создаем стартовый экземпляр клавиатуры
 const keyboard = new Keyboard();
-keyboard.keyboardOn('en');
-// Слушаем события нажатия клавиш на виртуальной клавиатуре мышкой
+keyboard.keyboardOn();
+
 document.addEventListener('mousedown', (event) => {
-  const { target } = event;
-  if (target.className.includes('key') && !target.className.includes('keyboard')) {
-    target.classList.add('key--active');
-    document.addEventListener('mouseup', () => {
-      target.classList.remove('key--active');
-    });
+  const arrKeys = document.querySelectorAll('.key');
+  const objKeys = {};
+  arrKeys.forEach((el) => {
+    objKeys[el.dataset.key] = el;
+  });
+  if (event.target.dataset.key === 'CapsLock') {
+    document.querySelector('.keyboard').remove();
+    keyboard.capsLock = !keyboard.capsLock;
+    keyboard.keyboardOn();
+  }
+  if (event.target.dataset.key === 'ShiftRight'
+  || event.target.dataset.key === 'ShiftLeft') {
+    document.querySelector('.keyboard').remove();
+    keyboard.shiftOn = !keyboard.shiftOn;
+    keyboard.keyboardOn();
+  }
+  if (event.target.dataset.key === 'LANG') {
+    document.querySelector('.keyboard').remove();
+    if (keyboard.language === 'en') {
+      keyboard.language = 'ru';
+    } else {
+      keyboard.language = 'en';
+    }
+    keyboard.keyboardOn();
   }
 });
-// Слушаем события нажатия клавиш на реальной клавиатуре
-document.addEventListener('keydown', (event) => {
+
+document.addEventListener('mouseup', (event) => {
   const arrKeys = document.querySelectorAll('.key');
+  const objKeys = {};
   arrKeys.forEach((el) => {
-    if (event.code === el.dataset.key) {
-      el.classList.add('key--active');
-      if (event.code === 'AltLeft'
-      || event.code === 'AltRight'
-      || event.code === 'Tab') {
-        event.preventDefault();
-      }
-    }
-    window.addEventListener('keyup', () => {
-      el.classList.remove('key--active');
-    });
+    objKeys[el.dataset.key] = el;
   });
+  if (event.target.dataset.key === 'CapsLock') {
+    objKeys.CapsLock.classList.remove('key--active');
+  }
+  if (event.target.dataset.key === 'ShiftRight'
+  || event.target.dataset.key === 'ShiftLeft') {
+    document.querySelector('.keyboard').remove();
+    keyboard.shiftOn = !keyboard.shiftOn;
+    keyboard.keyboardOn();
+    objKeys.ShiftRight.classList.remove('key--active');
+    objKeys.ShiftLeft.classList.remove('key--active');
+  }
+});
+
+document.addEventListener('keydown', (event) => {
+  event.preventDefault();
+  const arrKeys = document.querySelectorAll('.key');
+  const objKeys = {};
+  arrKeys.forEach((el) => {
+    objKeys[el.dataset.key] = el;
+  });
+  if (event.key !== 'Shift' && event.key !== 'Alt' && event.key !== 'Control' && event.key !== 'CapsLock') {
+    const input = document.querySelector('.textarea');
+    if (event.key === 'Tab') {
+      input.value += '\t';
+    } else if (event.key === 'Enter') {
+      input.value += '\n';
+    } else if (event.key === 'Backspace') {
+      input.value = input.value.split('').splice(0, (input.value.length - 1)).join('');
+    } else {
+      input.value += objKeys[event.code].textContent;
+    }
+  }
+  if (event.repeat) {
+    return;
+  }
+  if (event.code === 'CapsLock') {
+    document.querySelector('.keyboard').remove();
+    keyboard.capsLock = !keyboard.capsLock;
+    keyboard.keyboardOn();
+  }
+  if (event.code === 'ShiftRight' || event.code === 'ShiftLeft') {
+    document.querySelector('.keyboard').remove();
+    keyboard.shiftOn = !keyboard.shiftOn;
+    keyboard.keyboardOn();
+  }
+  if ((event.code === 'AltLeft' && event.ctrlKey)
+  || (event.code === 'AltRight' && event.ctrlKey)) {
+    document.querySelector('.keyboard').remove();
+    if (keyboard.language === 'en') {
+      keyboard.language = 'ru';
+    } else {
+      keyboard.language = 'en';
+    }
+    keyboard.keyboardOn();
+  }
+});
+
+document.addEventListener('keyup', (event) => {
+  if (event.code === 'ShiftRight' || event.code === 'ShiftLeft') {
+    document.querySelector('.keyboard').remove();
+    keyboard.shiftOn = !keyboard.shiftOn;
+    keyboard.keyboardOn();
+  }
 });

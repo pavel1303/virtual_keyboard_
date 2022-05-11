@@ -373,8 +373,8 @@ const keys = {
     en: {
       capsOn: ']',
       capsOff: ']',
-      shiftOn: '{',
-      shihtCaps: '{',
+      shiftOn: '}',
+      shihtCaps: '}',
     },
   },
   Backslash: {
@@ -879,6 +879,20 @@ const keys = {
       capsOff: 'ᐳ',
       shiftOn: 'ᐳ',
       shihtCaps: 'ᐳ',
+    },
+  },
+  LANG: {
+    ru: {
+      capsOn: 'RU',
+      capsOff: 'RU',
+      shiftOn: 'RU',
+      shihtCaps: 'RU',
+    },
+    en: {
+      capsOn: 'EN',
+      capsOff: 'EN',
+      shiftOn: 'EN',
+      shihtCaps: 'EN',
     },
   },
 };
