@@ -18,7 +18,7 @@ export default class Keyboard {
     // Свойство указыващее на то активирован ли capslock в настоящий момент
     this.capsLock = false;
     // Язык в настоящий момент
-    this.language = 'en';
+    this.language = localStorage.getItem('lang') || 'en';
   }
 
   keyboardOn() {

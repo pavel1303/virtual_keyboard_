@@ -33,6 +33,7 @@ document.addEventListener('mousedown', (event) => {
       keyboard.language = 'en';
     }
     keyboard.keyboardOn();
+    localStorage.setItem('lang', keyboard.language);
   }
 });
 
@@ -96,6 +97,7 @@ document.addEventListener('keydown', (event) => {
       keyboard.language = 'en';
     }
     keyboard.keyboardOn();
+    localStorage.setItem('lang', keyboard.language);
   }
 });
 

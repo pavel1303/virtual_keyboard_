@@ -265,7 +265,7 @@ var Keyboard = /*#__PURE__*/function () {
 
     this.capsLock = false; // Язык в настоящий момент
 
-    this.language = 'en';
+    this.language = localStorage.getItem('lang') || 'en';
   }
 
   _createClass(Keyboard, [{
@@ -1380,6 +1380,7 @@ document.addEventListener('mousedown', function (event) {
     }
 
     keyboard.keyboardOn();
+    localStorage.setItem('lang', keyboard.language);
   }
 });
 document.addEventListener('mouseup', function (event) {
@@ -1449,6 +1450,7 @@ document.addEventListener('keydown', function (event) {
     }
 
     keyboard.keyboardOn();
+    localStorage.setItem('lang', keyboard.language);
   }
 });
 document.addEventListener('keyup', function (event) {
